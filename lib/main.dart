@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_pro/carousel_pro.dart';
+import './components/horizontalListView.dart';
+import './components/products.dart';
 
 void main() {
   runApp(MyApp());
@@ -38,7 +40,7 @@ class _MyHomePageState extends State<MyHomePage> {
           AssetImage('assets/others/w3.jpeg'),
           AssetImage('assets/others/w4.jpeg'),
         ],
-        autoplay: true,
+        autoplay: false,
         dotSize: 4,
         indicatorBgPadding: 4,
         animationCurve: Curves.fastOutSlowIn,
@@ -154,6 +156,28 @@ class _MyHomePageState extends State<MyHomePage> {
       body: ListView(
         children: [
           imageCarousel,
+          Padding(
+            padding: EdgeInsets.all(8),
+            child: Text(
+              'Categories',
+              style: TextStyle(fontSize: 16, color: Colors.black),
+              textAlign: TextAlign.center,
+            ),
+            // Horizontal ListView
+          ),
+          HorizontalList(),
+          Padding(
+            padding: EdgeInsets.all(12),
+            child: Text(
+              'Most recents',
+              style: TextStyle(fontSize: 16, color: Colors.black),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          Container(
+            height: 320,
+            child: Products(),
+          )
         ],
       ),
     );
