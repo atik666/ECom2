@@ -4,7 +4,7 @@ class HorizontalList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 80,
+      height: 100,
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: [
@@ -67,6 +67,7 @@ class Category extends StatelessWidget {
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 12,
+                color: Colors.black87,
               ),
             ),
           ),

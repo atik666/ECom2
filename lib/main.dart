@@ -169,7 +169,7 @@ class _MyHomePageState extends State<MyHomePage> {
           Padding(
             padding: EdgeInsets.all(12),
             child: Text(
-              'Most recents',
+              'Most recent',
               style: TextStyle(fontSize: 16, color: Colors.black),
               textAlign: TextAlign.center,
             ),
