@@ -11,14 +11,50 @@ class _ProductsState extends State<Products> {
     {
       'name': 'Blazer',
       'picture': 'assets/products/blazer1.jpeg',
-      'oldPrice': 153,
-      'newPrice': 87,
+      'oldPrice': 153.0,
+      'newPrice': 87.0,
+      'brand': 'Puma',
+      'condition': 'Excellent',
     },
     {
       'name': 'Red dress',
       'picture': 'assets/products/dress1.jpeg',
-      'oldPrice': 174,
-      'newPrice': 99,
+      'oldPrice': 174.0,
+      'newPrice': 99.0,
+      'brand': 'Nike',
+      'condition': 'Good',
+    },
+    {
+      'name': 'Hills',
+      'picture': 'assets/products/hills1.jpeg',
+      'oldPrice': 80.50,
+      'newPrice': 50.90,
+      'brand': 'Addidas',
+      'condition': 'New',
+    },
+    {
+      'name': 'Skirt',
+      'picture': 'assets/products/skt1.jpeg',
+      'oldPrice': 94.70,
+      'newPrice': 93.50,
+      'brand': 'Prada',
+      'condition': 'Latest',
+    },
+    {
+      'name': 'Pants',
+      'picture': 'assets/products/pants1.jpg',
+      'oldPrice': 74.10,
+      'newPrice': 63.70,
+      'brand': 'Wasap',
+      'condition': 'New',
+    },
+    {
+      'name': 'Shoes',
+      'picture': 'assets/products/shoe1.jpg',
+      'oldPrice': 23.10,
+      'newPrice': 19.15,
+      'brand': 'Well',
+      'condition': 'Old',
     },
   ];
 
@@ -34,6 +70,8 @@ class _ProductsState extends State<Products> {
             productPicture: products[index]['picture'],
             prodOldPrice: products[index]['oldPrice'],
             prodPrice: products[index]['newPrice'],
+            brand: products[index]['brand'],
+            condition: products[index]['condition'],
           );
         });
   }
@@ -42,14 +80,18 @@ class _ProductsState extends State<Products> {
 class SingleProduct extends StatelessWidget {
   final String productName;
   final String productPicture;
-  final int prodOldPrice;
-  final int prodPrice;
+  final double prodOldPrice;
+  final double prodPrice;
+  final String brand;
+  final String condition;
 
   SingleProduct({
     this.productName,
     this.productPicture,
     this.prodOldPrice,
     this.prodPrice,
+    this.brand,
+    this.condition,
   });
 
   @override
@@ -65,9 +107,11 @@ class SingleProduct extends StatelessWidget {
                 builder: (BuildContext context) {
                   return ProductDetails(
                     image: productPicture,
-                  name: productName,
-                  oldPrice: prodOldPrice,
+                    name: productName,
+                    oldPrice: prodOldPrice,
                     newPrice: prodPrice,
+                    brand: brand,
+                    condition: condition,
                   );
                 },
               ),
@@ -76,37 +120,35 @@ class SingleProduct extends StatelessWidget {
           child: GridTile(
             footer: Container(
               color: Colors.white70,
-              child: ListTile(
-                leading: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      productName,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w800,
-                      ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text(
+                    productName,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w800,
                     ),
-                  ],
-                ),
-                title: Text(
-                  '\$$prodPrice',
-                  style: TextStyle(
-                    color: Colors.red[900],
-                    fontWeight: FontWeight.w800,
-                    fontSize: 16,
                   ),
-                ),
-                subtitle: Text(
-                  '$prodOldPrice',
-                  style: TextStyle(
-                    color: Colors.black87,
-                    fontWeight: FontWeight.w800,
-                    fontSize: 16,
-                    decoration: TextDecoration.lineThrough,
+                  Text(
+                    '$prodOldPrice',
+                    style: TextStyle(
+                      color: Colors.black87,
+                      fontWeight: FontWeight.w800,
+                      fontSize: 16,
+                      decoration: TextDecoration.lineThrough,
+                    ),
                   ),
-                ),
+                  Text(
+                    '\$$prodPrice',
+                    style: TextStyle(
+                      color: Colors.red[900],
+                      fontWeight: FontWeight.w800,
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
               ),
             ),
             child: Container(

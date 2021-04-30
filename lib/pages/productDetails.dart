@@ -1,17 +1,23 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_ecom/components/similarProducts.dart';
+import 'package:flutter_ecom/main.dart';
 
 class ProductDetails extends StatefulWidget {
   final String image;
   final String name;
-  final int oldPrice;
-  final int newPrice;
+  final double oldPrice;
+  final double newPrice;
+  final String brand;
+  final String condition;
 
   ProductDetails({
     this.image,
     this.name,
     this.oldPrice,
     this.newPrice,
+    this.brand,
+    this.condition,
   });
 
   @override
@@ -25,19 +31,22 @@ class _ProductDetailsState extends State<ProductDetails> {
       appBar: AppBar(
         elevation: 0.0,
         backgroundColor: Colors.red[900],
-        title: Text('ShopApp'),
+        title: InkWell(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) => MyApp(),
+              ),
+            );
+          },
+          child: Text('ShopApp'),
+        ),
         actions: [
           IconButton(
             onPressed: null,
             icon: Icon(
               Icons.search,
-              color: Colors.white,
-            ),
-          ),
-          IconButton(
-            onPressed: null,
-            icon: Icon(
-              Icons.shopping_cart,
               color: Colors.white,
             ),
           ),
@@ -261,6 +270,9 @@ class _ProductDetailsState extends State<ProductDetails> {
           ListTile(
             title: Text(
               'Product details',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
             ),
             subtitle: Text(
                 "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."),
@@ -281,7 +293,7 @@ class _ProductDetailsState extends State<ProductDetails> {
               ),
               Padding(
                 padding: EdgeInsets.all(5),
-                child: Text(widget.name),
+                child: Text('${widget.name}'),
               ),
             ],
           ),
@@ -298,7 +310,7 @@ class _ProductDetailsState extends State<ProductDetails> {
               ),
               Padding(
                 padding: EdgeInsets.all(5),
-                child: Text("Brand x"),
+                child: Text(widget.brand),
               ),
             ],
           ),
@@ -315,9 +327,30 @@ class _ProductDetailsState extends State<ProductDetails> {
               ),
               Padding(
                 padding: EdgeInsets.all(5),
-                child: Text("brand condition"),
+                child: Text(widget.condition),
               ),
             ],
+          ),
+          SizedBox(
+            height: 2,
+          ),
+          Padding(
+            padding: EdgeInsets.fromLTRB(0, 0, 0, 4),
+            child: Text(
+              'Similar products',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          Container(
+            height: 240,
+            child: SimilarProducts(),
+          ),
+          SizedBox(
+            height: 10,
           ),
         ],
       ),
