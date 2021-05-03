@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -59,11 +61,33 @@ class _LoginState extends State<Login> {
         await firebaseAuth.signInWithCredential(credential);
     final User user = authResult.user;
 
-    if(user != null){
-      
-    }else{
-
-    }
+    if (user != null) {
+      final QuerySnapshot result = await FirebaseFirestore.instance
+          .collection('users')
+          .where('id', isEqualTo: user.uid)
+          .get();
+      final List<DocumentSnapshot> documents = result.docs;
+      if (documents.length == 0) {
+        //insert the user to our collection
+        FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+          'id': user.uid,
+          'email': user.email,
+          'userName': user.displayName,
+          'profilePic': user.photoURL,
+        });
+        await preferences.setString('id', user.uid);
+        await preferences.setString('userName', user.displayName);
+        await preferences.setString('profilePic', user.photoURL);
+      } else {
+        await preferences.setString('id', documents[0]['id']);
+        await preferences.setString('userName', documents[0]['userName']);
+        await preferences.setString('profilePic', documents[0]['profilePic']);
+      }
+      Fluttertoast.showToast(msg: "Login successful");
+      setState(() {
+        loading = false;
+      });
+    } else {}
   }
 
   @override
