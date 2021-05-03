@@ -29,20 +29,6 @@ class _CartProductsState extends State<CartProducts> {
     },
   ];
 
-  void addQuantity(int quantity) {
-    int _quantity;
-    _quantity = quantity + 1;
-  }
-
-  void delQuantity(int quantity) {
-    int _quantity;
-    _quantity = quantity - 1;
-    if (quantity == 0) {
-      _quantity = 0;
-      return;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -57,23 +43,20 @@ class _CartProductsState extends State<CartProducts> {
             size: productsCartList[index]['size'],
             productPicture: productsCartList[index]['picture'],
             color: productsCartList[index]['color'],
-            add: addQuantity(productsCartList[index]['quantity']),
           );
         });
   }
 }
 
-class SingleCartProduct extends StatelessWidget {
+class SingleCartProduct extends StatefulWidget {
   final String productName;
   final String productPicture;
-  final double prodPrice;
+  double prodPrice;
   final String brand;
   final String size;
-  final int quantity;
+  int quantity;
   final String condition;
   final String color;
-  Function add;
-  Function del;
 
   SingleCartProduct({
     this.condition,
@@ -84,22 +67,25 @@ class SingleCartProduct extends StatelessWidget {
     this.size,
     this.quantity,
     this.color,
-    this.add,
-    this.del,
   });
 
+  @override
+  _SingleCartProductState createState() => _SingleCartProductState();
+}
+
+class _SingleCartProductState extends State<SingleCartProduct> {
   @override
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
         leading: Image.asset(
-          productPicture,
+          widget.productPicture,
           width: 40,
           height: 60,
           fit: BoxFit.cover,
         ),
         title: Text(
-          productName,
+          widget.productName,
         ),
         subtitle: Column(
           children: [
@@ -118,7 +104,7 @@ class SingleCartProduct extends StatelessWidget {
                               fontWeight: FontWeight.w900,
                             ),
                           ),
-                          Text(brand),
+                          Text(widget.brand),
                         ],
                       )
                     ],
@@ -133,7 +119,7 @@ class SingleCartProduct extends StatelessWidget {
                               fontWeight: FontWeight.w900,
                             ),
                           ),
-                          Text(size),
+                          Text(widget.size),
                         ],
                       )
                     ],
@@ -148,7 +134,7 @@ class SingleCartProduct extends StatelessWidget {
                               fontWeight: FontWeight.w900,
                             ),
                           ),
-                          Text(color),
+                          Text(widget.color),
                         ],
                       )
                     ],
@@ -174,16 +160,20 @@ class SingleCartProduct extends StatelessWidget {
                           IconButton(
                             icon: Icon(Icons.arrow_drop_up),
                             onPressed: () {
-                              return add(quantity);
+                              setState(() {
+                                return addQuantity();
+                              });
                             },
                           ),
                           Text(
-                            quantity.toString(),
+                            widget.quantity.toString(),
                           ),
                           IconButton(
                             icon: Icon(Icons.arrow_drop_down),
                             onPressed: () {
-                              return del(quantity);
+                              setState(() {
+                                return delQuantity();
+                              });
                             },
                           ),
                         ],
@@ -205,7 +195,9 @@ class SingleCartProduct extends StatelessWidget {
                                     ),
                                   ),
                                   Text(
-                                    "\$" + prodPrice.toString(),
+                                    "\$" +
+                                        (widget.prodPrice * widget.quantity)
+                                            .toStringAsFixed(2),
                                     style: TextStyle(
                                       color: Colors.red[900],
                                       fontSize: 16,
@@ -227,5 +219,20 @@ class SingleCartProduct extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  addQuantity() {
+    widget.quantity++;
+    //return quantity;
+    return (widget.quantity);
+  }
+
+  delQuantity() {
+    widget.quantity = widget.quantity - 1;
+    if (widget.quantity < 1) {
+      widget.quantity = 1;
+      return widget.quantity;
+    }
+    return (widget.quantity);
   }
 }
