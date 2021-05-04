@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -87,11 +85,73 @@ class _LoginState extends State<Login> {
       setState(() {
         loading = false;
       });
-    } else {}
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => MyHomePage(),
+        ),
+      );
+    } else {
+      Fluttertoast.showToast(msg: 'Login failed');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 6,
+        centerTitle: true,
+        title: Text(
+          'Login',
+          style: TextStyle(color: Colors.red[900]),
+        ),
+      ),
+      body: Stack(
+        children: [
+          Image.asset(
+            'assets/others/back.jpg',
+            fit: BoxFit.cover,
+            width: double.infinity,
+          ),
+          Container(
+            alignment: Alignment.topCenter,
+            child: Image.asset(
+              "assets/others/logo.jpg",
+              width: 150,
+              height: 150,
+            ),
+          ),
+          Visibility(
+            visible: loading ?? true,
+            child: Center(
+              child: Container(
+                alignment: Alignment.center,
+                color: Colors.white.withOpacity(0.9),
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.red[900]),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+      bottomNavigationBar: Container(
+        child: Padding(
+          padding: EdgeInsets.only(left: 12, right: 12, top: 8, bottom: 24),
+          child: FlatButton(
+            color: Colors.red,
+            onPressed: () {
+              handleSignIn();
+            },
+            child: Text(
+              'Sign in / Sign up with google',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

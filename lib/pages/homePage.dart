@@ -40,7 +40,9 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text('ShopApp'),
         actions: [
           IconButton(
-            onPressed: null,
+            onPressed: () {
+
+            },
             icon: Icon(
               Icons.search,
               color: Colors.white,
