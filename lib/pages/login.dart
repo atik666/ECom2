@@ -4,7 +4,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_ecom/main.dart';
 import 'homePage.dart';
 
 class Login extends StatefulWidget {
@@ -16,8 +15,11 @@ class _LoginState extends State<Login> {
   final GoogleSignIn googleSignIn = GoogleSignIn();
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   SharedPreferences preferences;
+  final _formKey = GlobalKey<FormState>();
   bool loading = false;
   bool isLoggedIn = false;
+  TextEditingController _emailTextController = TextEditingController();
+  TextEditingController _passwordTextController = TextEditingController();
 
   @override
   void initState() {
@@ -31,7 +33,7 @@ class _LoginState extends State<Login> {
     });
     preferences = await SharedPreferences.getInstance();
     isLoggedIn = await googleSignIn.isSignedIn();
-    if (isLoggedIn) {
+    if (!isLoggedIn) {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
@@ -116,11 +118,52 @@ class _LoginState extends State<Login> {
             width: double.infinity,
           ),
           Container(
+            color: Colors.black.withOpacity(0.2),
+            width: double.infinity,
+            height: double.infinity,
+          ),
+          Container(
+            padding: EdgeInsets.fromLTRB(0, 8, 0, 0),
             alignment: Alignment.topCenter,
             child: Image.asset(
               "assets/others/logo.jpg",
               width: 150,
               height: 150,
+            ),
+          ),
+          Container(
+            alignment: Alignment.center,
+            child: Center(
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 200, 10, 0),
+                      child: Material(
+                        borderRadius: BorderRadius.circular(20),
+                          child: TextFormField(
+                            decoration: InputDecoration(
+                                hintText: "Email",
+                                icon: Icon(Icons.email),
+                                border: OutlineInputBorder(),
+                                labelText: "Email *"),
+                            keyboardType: TextInputType.emailAddress,
+                            controller: _emailTextController,
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return 'Please enter a valid email';
+                              } else {
+                                return null;
+                              }
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
           Visibility(

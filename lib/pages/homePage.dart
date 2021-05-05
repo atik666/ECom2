@@ -5,11 +5,13 @@ import '../components/products.dart';
 import '../pages/cart.dart';
 
 class MyHomePage extends StatefulWidget {
+
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
   @override
   Widget build(BuildContext context) {
     Widget imageCarousel = Container(
