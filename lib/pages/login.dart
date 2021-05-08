@@ -139,9 +139,12 @@ class _LoginState extends State<Login> {
                 child: Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(10, 200, 10, 0),
+                      padding: const EdgeInsets.fromLTRB(10, 220, 10, 0),
                       child: Material(
-                        borderRadius: BorderRadius.circular(20),
+                        color: Colors.white.withOpacity(0.8),
+                        borderRadius: BorderRadius.circular(15),
+                        child: Container(
+                          padding: EdgeInsets.all(8),
                           child: TextFormField(
                             decoration: InputDecoration(
                                 hintText: "Email",
@@ -158,6 +161,92 @@ class _LoginState extends State<Login> {
                               }
                             },
                           ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 5, 10, 0),
+                      child: Material(
+                        color: Colors.white.withOpacity(0.8),
+                        borderRadius: BorderRadius.circular(15),
+                        child: Container(
+                          padding: EdgeInsets.all(8),
+                          child: TextFormField(
+                            decoration: InputDecoration(
+                                hintText: "Password",
+                                icon: Icon(Icons.lock_rounded),
+                                border: OutlineInputBorder(),
+                                labelText: "Password *"),
+                            obscureText: true,
+                            controller: _passwordTextController,
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return 'Password cannot be empty';
+                              } else if (value.length < 6) {
+                                return "Password must be at least 6 characters long";
+                              } else {
+                                return null;
+                              }
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 5, 10, 0),
+                      child: FlatButton(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                        minWidth: MediaQuery.of(context).size.width,
+                        height: 50,
+                        color: Colors.blue.withOpacity(0.8),
+                        onPressed: () {},
+                        child: Text(
+                          'Login',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Container(),
+                    ),
+                    Divider(
+                      color: Colors.white,
+                    ),
+                    Container(
+                      width: double.infinity,
+                      color: Colors.black.withOpacity(0.5),
+                      child: Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Text(
+                          'Other login options',
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.white,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 10, 10, 15),
+                      child: FlatButton(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                        minWidth: MediaQuery.of(context).size.width,
+                        height: 50,
+                        color: Colors.red.withOpacity(0.8),
+                        onPressed: () {},
+                        child: Text(
+                          'Sign in / Sign up with google',
+                          style: TextStyle(color: Colors.white),
                         ),
                       ),
                     ),
@@ -179,21 +268,6 @@ class _LoginState extends State<Login> {
             ),
           ),
         ],
-      ),
-      bottomNavigationBar: Container(
-        child: Padding(
-          padding: EdgeInsets.only(left: 12, right: 12, top: 8, bottom: 24),
-          child: FlatButton(
-            color: Colors.red,
-            onPressed: () {
-              handleSignIn();
-            },
-            child: Text(
-              'Sign in / Sign up with google',
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
-        ),
       ),
     );
   }
