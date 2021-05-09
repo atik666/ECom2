@@ -16,6 +16,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Ecom',
+      theme: ThemeData(
+        primaryColor: Colors.red[900],
+      ),
       home: Login(),
     );
   }

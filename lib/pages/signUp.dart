@@ -1,18 +1,14 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_ecom/pages/signUp.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'homePage.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_ecom/pages/login.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class Login extends StatefulWidget {
+class SignUP extends StatefulWidget {
   @override
-  _LoginState createState() => _LoginState();
+  _SignUPState createState() => _SignUPState();
 }
 
-class _LoginState extends State<Login> {
+class _SignUPState extends State<SignUP> {
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   SharedPreferences preferences;
   final _formKey = GlobalKey<FormState>();
@@ -20,28 +16,19 @@ class _LoginState extends State<Login> {
   bool isLoggedIn = false;
   TextEditingController _emailTextController = TextEditingController();
   TextEditingController _passwordTextController = TextEditingController();
+  TextEditingController _confirmPasswordTextController =
+      TextEditingController();
+  TextEditingController _nameTextController = TextEditingController();
+  String gender;
+  String groupValue = "male";
 
-  @override
-  void initState() {
-    super.initState();
-    isSignedIn();
-  }
-
-  void isSignedIn() async {
+  void valueChanged(e) {
     setState(() {
-      loading = true;
-    });
-
-    if (isLoggedIn) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => MyHomePage(),
-        ),
-      );
-    }
-    setState(() {
-      loading = false;
+      if (e == 'male') {
+        groupValue = e;
+      } else if (e == 'female') {
+        groupValue = e;
+      }
     });
   }
 
@@ -53,14 +40,14 @@ class _LoginState extends State<Login> {
         elevation: 6,
         centerTitle: true,
         title: Text(
-          'Login',
+          'Register',
           style: TextStyle(color: Colors.red[900]),
         ),
       ),
       body: Stack(
         children: [
           Image.asset(
-            'assets/others/backL.jpg',
+            'assets/others/back.jpg',
             fit: BoxFit.cover,
             width: double.infinity,
           ),
@@ -86,7 +73,87 @@ class _LoginState extends State<Login> {
                 child: ListView(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(10, 220, 10, 0),
+                      padding: const EdgeInsets.fromLTRB(10, 180, 10, 0),
+                      child: Material(
+                        color: Colors.white.withOpacity(0.8),
+                        borderRadius: BorderRadius.circular(15),
+                        child: Container(
+                          padding: EdgeInsets.all(8),
+                          child: TextFormField(
+                            decoration: InputDecoration(
+                                hintText: "Full name",
+                                icon: Icon(Icons.person),
+                                border: OutlineInputBorder(),
+                                labelText: "Name *"),
+                            controller: _nameTextController,
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return 'The name field cannot be empty';
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 5, 10, 0),
+                      child: Container(
+                        padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.7),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Gender:",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                              ),
+                            ),
+                            Expanded(
+                              child: ListTile(
+                                trailing: Radio(
+                                  fillColor: MaterialStateColor.resolveWith(
+                                    (states) => Colors.white,
+                                  ),
+                                  value: "male",
+                                  groupValue: groupValue,
+                                  onChanged: (e) => valueChanged(e),
+                                ),
+                                title: Text(
+                                  'Male',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: ListTile(
+                                trailing: Radio(
+                                  fillColor: MaterialStateColor.resolveWith(
+                                    (states) => Colors.white,
+                                  ),
+                                  value: "female",
+                                  groupValue: groupValue,
+                                  onChanged: (e) => valueChanged(e),
+                                ),
+                                title: Text(
+                                  'Female',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 5, 10, 0),
                       child: Material(
                         color: Colors.white.withOpacity(0.8),
                         borderRadius: BorderRadius.circular(15),
@@ -141,6 +208,34 @@ class _LoginState extends State<Login> {
                     ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(10, 5, 10, 0),
+                      child: Material(
+                        color: Colors.white.withOpacity(0.8),
+                        borderRadius: BorderRadius.circular(15),
+                        child: Container(
+                          padding: EdgeInsets.all(8),
+                          child: TextFormField(
+                            decoration: InputDecoration(
+                                hintText: "Confirm password",
+                                icon: Icon(Icons.lock_rounded),
+                                border: OutlineInputBorder(),
+                                labelText: "Confirm password *"),
+                            obscureText: true,
+                            controller: _confirmPasswordTextController,
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return 'Password cannot be empty';
+                              } else if (value.length < 6) {
+                                return "Password must be at least 6 characters long";
+                              } else {
+                                return null;
+                              }
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 5, 10, 0),
                       child: FlatButton(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15),
@@ -148,10 +243,10 @@ class _LoginState extends State<Login> {
                         padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                         minWidth: MediaQuery.of(context).size.width,
                         height: 50,
-                        color: Colors.blue.withOpacity(0.8),
+                        color: Colors.red[900].withOpacity(0.7),
                         onPressed: () {},
                         child: Text(
-                          'Login',
+                          'Register',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 20,
@@ -159,26 +254,8 @@ class _LoginState extends State<Login> {
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.6),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                        child: Text(
-                          'Forgot password?',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                          ),
-                        ),
-                      ),
-                    ),
                     Divider(
-                      height: 5,
+                      height: 15,
                       color: Colors.white,
                       thickness: 1,
                     ),
@@ -193,7 +270,7 @@ class _LoginState extends State<Login> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              "Don't have an account?",
+                              "Already registered?",
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: Colors.white,
@@ -202,17 +279,12 @@ class _LoginState extends State<Login> {
                             ),
                             TextButton(
                               onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => SignUP(),
-                                  ),
-                                );
+                                Navigator.pop(context);
                               },
                               child: Text(
-                                'Sign up',
+                                'Login',
                                 style: TextStyle(
-                                  color: Colors.red,
+                                  color: Colors.blue,
                                   fontSize: 20,
                                 ),
                               ),
