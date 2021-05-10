@@ -21,13 +21,16 @@ class _SignUPState extends State<SignUP> {
   TextEditingController _nameTextController = TextEditingController();
   String gender;
   String groupValue = "male";
+  bool hidePass = true;
 
   void valueChanged(e) {
     setState(() {
       if (e == 'male') {
         groupValue = e;
+        gender = e;
       } else if (e == 'female') {
         groupValue = e;
+        gender = e;
       }
     });
   }
@@ -183,15 +186,15 @@ class _SignUPState extends State<SignUP> {
                       child: Material(
                         color: Colors.white.withOpacity(0.8),
                         borderRadius: BorderRadius.circular(15),
-                        child: Container(
-                          padding: EdgeInsets.all(8),
-                          child: TextFormField(
+                        child: ListTile(
+                          //padding: EdgeInsets.all(8),
+                          title: TextFormField(
                             decoration: InputDecoration(
                                 hintText: "Password",
                                 icon: Icon(Icons.lock_rounded),
                                 border: OutlineInputBorder(),
                                 labelText: "Password *"),
-                            obscureText: true,
+                            obscureText: hidePass,
                             controller: _passwordTextController,
                             validator: (value) {
                               if (value.isEmpty) {
@@ -203,6 +206,14 @@ class _SignUPState extends State<SignUP> {
                               }
                             },
                           ),
+                          trailing: IconButton(
+                            icon: Icon(Icons.remove_red_eye),
+                            onPressed: () {
+                              setState(() {
+                                hidePass = false;
+                              });
+                            },
+                          ),
                         ),
                       ),
                     ),
@@ -211,24 +222,36 @@ class _SignUPState extends State<SignUP> {
                       child: Material(
                         color: Colors.white.withOpacity(0.8),
                         borderRadius: BorderRadius.circular(15),
-                        child: Container(
-                          padding: EdgeInsets.all(8),
-                          child: TextFormField(
+                        child: ListTile(
+                          //contentPadding: EdgeInsets.all(8),
+                          title: TextFormField(
                             decoration: InputDecoration(
                                 hintText: "Confirm password",
                                 icon: Icon(Icons.lock_rounded),
                                 border: OutlineInputBorder(),
                                 labelText: "Confirm password *"),
-                            obscureText: true,
+                            obscureText: hidePass,
                             controller: _confirmPasswordTextController,
                             validator: (value) {
                               if (value.isEmpty) {
                                 return 'Password cannot be empty';
                               } else if (value.length < 6) {
                                 return "Password must be at least 6 characters long";
+                              } else if (_passwordTextController.text !=
+                                  value) {
+                                return "The passwords did not match";
                               } else {
                                 return null;
                               }
+                            },
+                          ),
+
+                          trailing: IconButton(
+                            icon: Icon(Icons.remove_red_eye),
+                            onPressed: () {
+                              setState(() {
+                                hidePass = false;
+                              });
                             },
                           ),
                         ),
