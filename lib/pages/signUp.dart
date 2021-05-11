@@ -1,7 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_ecom/pages/homePage.dart';
 import 'package:flutter_ecom/pages/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../database/users.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class SignUP extends StatefulWidget {
   @override
@@ -11,6 +14,7 @@ class SignUP extends StatefulWidget {
 class _SignUPState extends State<SignUP> {
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   SharedPreferences preferences;
+  UserServices _userServices = UserServices();
   final _formKey = GlobalKey<FormState>();
   bool loading = false;
   bool isLoggedIn = false;
@@ -267,7 +271,9 @@ class _SignUPState extends State<SignUP> {
                         minWidth: MediaQuery.of(context).size.width,
                         height: 50,
                         color: Colors.red[900].withOpacity(0.7),
-                        onPressed: () {},
+                        onPressed: () async {
+                          validateForm();
+                        },
                         child: Text(
                           'Register',
                           style: TextStyle(
@@ -336,5 +342,37 @@ class _SignUPState extends State<SignUP> {
         ],
       ),
     );
+  }
+
+  Future validateForm() async {
+    FormState formState = _formKey.currentState;
+
+    if (formState.validate()) {
+      formState.reset();
+      final User user = firebaseAuth.currentUser;
+
+      if (user == null) {
+        firebaseAuth
+            .createUserWithEmailAndPassword(
+                email: _emailTextController.text,
+                password: _passwordTextController.text)
+            .then((user) => {
+                  _userServices.createUser({
+                    "username": _nameTextController.text,
+                    "email": _emailTextController.text,
+                    "password": _passwordTextController.text,
+                    "userId": user.user.uid,
+                    "gender": gender,
+                  })
+                })
+            .catchError((err) => {print(err.toString())});
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MyHomePage(),
+          ),
+        );
+      }
+    }
   }
 }
