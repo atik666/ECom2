@@ -32,6 +32,13 @@ class _LoginState extends State<Login> {
       loading = true;
     });
 
+    final user = firebaseAuth.currentUser;
+    if (user != null) {
+      setState(() {
+        isLoggedIn = true;
+      });
+    }
+
     if (isLoggedIn) {
       Navigator.pushReplacement(
         context,
